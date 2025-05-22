@@ -151,6 +151,7 @@ body {
     padding: 6rem 2rem 2rem;
     position: relative;
     overflow: hidden;
+    perspective: 2000px;
 }
 
 .hero-content {
@@ -373,26 +374,74 @@ body {
 /* Phone Mockup */
 .phone-mockup {
     flex: 1;
-    max-width: 300px;
+    max-width: 280px;
     margin-left: auto;
+    position: relative;
+    perspective: 1000px;
+    transform-style: preserve-3d;
 }
 
 .phone-svg {
     width: 100%;
     height: auto;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
 }
 
 .phone-frame {
-    fill: #333;
+    fill: #1a1a1a;
+    stroke: #333;
+    stroke-width: 1;
 }
 
 .phone-screen {
+    fill: #000000;
+}
+
+.phone-notch {
     fill: #1a1a1a;
 }
 
-.app-element {
-    fill: var(--accent-color);
-    opacity: 0.1;
+.home-indicator {
+    fill: rgba(255, 255, 255, 0.3);
+}
+
+.phone-content {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 264px;
+    height: 584px;
+    overflow: hidden;
+    border-radius: 35px;
+    z-index: 2;
+}
+
+/* Status Bar */
+.phone-status-bar {
+    display: grid;
+    grid-template-columns: 1fr 90px 1fr;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    color: var(--text-color);
+    height: 44px;
+}
+
+.left-status {
+    justify-self: start;
+}
+
+.notch-space {
+    height: 25px;
+}
+
+.right-status {
+    justify-self: end;
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
 }
 
 /* Features Section */
@@ -575,6 +624,22 @@ footer {
     .review-item {
         grid-template-columns: 1fr 100px 40px;
     }
+
+    .phone-mockup {
+        margin: 2rem auto;
+        max-width: 260px;
+    }
+
+    .review-panel {
+        width: calc(100% - 40px);
+        height: calc(100% - 80px);
+        padding: 0.8rem;
+    }
+
+    .review-item {
+        grid-template-columns: 1fr 80px 35px;
+        font-size: 0.75rem;
+    }
 }
 
 /* Utility Classes */
@@ -595,159 +660,156 @@ footer {
 
 /* Review Panel */
 .review-panel {
-    position: absolute;
-    right: 2rem;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(20px);
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 0.5rem 1rem;
+}
+
+.review-panel::-webkit-scrollbar {
+    display: none;
+}
+
+/* Camera View */
+.camera-view {
+    aspect-ratio: 16/9;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 16px;
+    margin: 0.5rem 0 1rem;
+    position: relative;
+    overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 2rem;
-    width: 320px;
-    box-shadow: var(--shadow);
-    animation: slideIn 0.8s ease-out;
-    z-index: 2;
 }
 
-.review-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    gap: 1rem;
-}
-
-.live-indicator {
-    background: rgba(255, 0, 0, 0.2);
-    color: #ff0000;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    animation: pulse 2s infinite;
-}
-
-.review-content {
+.camera-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.frame-overlay {
+    width: 60%;
+    height: 60%;
+    stroke: var(--accent-color);
+    stroke-width: 2;
+    opacity: 0.6;
+    animation: scan 2s ease-in-out infinite;
+}
+
+.scanning-text {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--accent-color);
+    animation: blink 1s ease-in-out infinite;
+}
+
+/* Review Content */
+.review-content {
+    padding: 0.5rem 0;
 }
 
 .review-item {
+    margin-bottom: 0.8rem;
     display: grid;
-    grid-template-columns: 1fr 150px 40px;
+    grid-template-columns: 1fr 60px 35px;
+    gap: 0.5rem;
     align-items: center;
-    gap: 1rem;
-    opacity: 0;
-    transform: translateX(20px);
-    animation: fadeInRight 0.5s ease-out forwards;
-}
-
-.review-item:nth-child(1) { animation-delay: 0.2s; }
-.review-item:nth-child(2) { animation-delay: 0.4s; }
-.review-item:nth-child(3) { animation-delay: 0.6s; }
-
-.item-label {
-    font-size: 0.9rem;
-    color: var(--text-color);
+    font-size: 0.8rem;
 }
 
 .progress-bar {
-    height: 4px;
+    width: 100%;
+    height: 3px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
+    border-radius: 3px;
     overflow: hidden;
 }
 
 .progress {
     height: 100%;
     background: var(--accent-color);
-    transform-origin: left;
-    animation: progressFill 1.5s ease-out forwards;
+    width: 0;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.rating {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--accent-color);
-}
+.review-item[data-rating="98"] .progress { width: 98%; }
+.review-item[data-rating="85"] .progress { width: 85%; }
+.review-item[data-rating="92"] .progress { width: 92%; }
 
+/* Feedback Section */
 .review-feedback {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
+    padding: 1rem 0;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    opacity: 0;
-    animation: fadeIn 0.5s ease-out 0.8s forwards;
 }
 
 .feedback-text {
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-    line-height: 1.5;
+    font-size: 0.8rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .feedback-tags {
     display: flex;
-    gap: 0.5rem;
     flex-wrap: wrap;
+    gap: 0.4rem;
 }
 
 .tag {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 0.25rem 0.75rem;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    animation: scaleIn 0.3s ease-out forwards;
-    opacity: 0;
-    transform: scale(0.8);
+    font-size: 0.7rem;
+    padding: 0.3rem 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: var(--accent-color);
 }
 
-.tag:nth-child(1) { animation-delay: 1s; }
-.tag:nth-child(2) { animation-delay: 1.2s; }
-.tag:nth-child(3) { animation-delay: 1.4s; }
-
-/* Enhanced Parallax and Animations */
-@keyframes slideIn {
-    from {
-        transform: translate(100%, -50%);
-        opacity: 0;
+/* New Animations */
+@keyframes scan {
+    0%, 100% {
+        transform: translateY(-5%);
+        opacity: 0.4;
     }
-    to {
-        transform: translate(0, -50%);
-        opacity: 1;
+    50% {
+        transform: translateY(5%);
+        opacity: 0.8;
     }
 }
 
-@keyframes fadeInRight {
-    from {
-        opacity: 0;
-        transform: translateX(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
+/* Phone Tilt Effect */
+.phone-mockup {
+    animation: float 6s ease-in-out infinite;
+}
+
+@media (hover: hover) {
+    .phone-mockup:hover {
+        animation-play-state: paused;
     }
 }
 
-@keyframes progressFill {
-    from { transform: scaleX(0); }
-    to { transform: scaleX(var(--progress)); }
+/* Add 3D perspective to the entire phone */
+.hero {
+    perspective: 2000px;
 }
 
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
+.phone-mockup {
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
 }
 
-@keyframes scaleIn {
-    from {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
+/* Add subtle hover effect to the phone */
+@media (hover: hover) {
+    .phone-mockup:hover {
+        transform: rotateY(-5deg) rotateX(5deg);
     }
 }
 
